@@ -128,7 +128,7 @@
                     <li>
                         <a href="form-examples.html" class="menu-toggle">
                             <i class="material-icons">assignment</i>
-                            <span>Forms</span>
+                            <span>Data Pasien</span>
                         </a>
                     </li>
                     <li>
