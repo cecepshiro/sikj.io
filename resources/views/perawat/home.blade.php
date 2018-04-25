@@ -201,8 +201,8 @@
                     <img src="{{ asset('/backend/images/user.png') }}" width="48" height="48" alt="User" />
                 </div>
                 <div class="info-container">
-                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dr. Fauzan Arrasyid</div>
-                    <div class="email">fauzan@example.com</div>
+                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}</div>
+                    <div class="email">{{ Auth::user()->email }}</div>
                     <div class="btn-group user-helper-dropdown">
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                         <ul class="dropdown-menu pull-right">
@@ -227,26 +227,47 @@
             <!-- #User Info -->
             <!-- Menu -->
             <div class="menu">
-                <ul class="list">
+            <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
                     <li class="active">
-                        <a href="index.html">
+                        <a href="{{ url('/') }}">
                             <i class="material-icons">home</i>
                             <span>Dashboard</span>
                         </a>
                     </li>             
                     <li>
-                        <a href="form-examples.html" class="menu-toggle">
+                        <a href="{{ route('pasien.index') }}" class="menu-toggle">
                             <i class="material-icons">assignment</i>
-                            <span>Forms</span>
+                            <span>Data Pasien</span>
                         </a>
                     </li>
                     <li>
-                        <a href="tables.html" class="menu-toggle">
+                        <a href="{{ route('rekmed.index') }}" class="menu-toggle">
                             <i class="material-icons">view_list</i>
-                            <span>Tables</span>
+                            <span>Rekam Medis</span>
                         </a>
-                    </li>                   
+                    </li>   
+                    <li class="">
+                        @if(Auth::user()->hak_akses==2)
+                        <a href="{{ route('dokter.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Dokter</span>
+                        </a>
+                        @elseif(Auth::user()->hak_akses==3)
+                        <a href="{{ route('perawat.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Perawat</span>
+                        </a>
+                        @endif
+                    </li>
+                    @if(Auth::user()->hak_akses==2)
+                    <li class="">
+                        <a href="{{ route('masterpengajuan.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data BHP</span>
+                        </a>
+                    </li>
+                    @endif         
                 </ul>
             </div>
             <!-- #Menu -->
@@ -270,6 +291,10 @@
             </div>
 
             <!-- Widgets -->
+            <?php
+             $cnt=DB::table('data_pasien')->select(DB::raw('count(*) as pgn'))->value('id_pasien');
+             $dkt=DB::table('data_dokter')->select(DB::raw('count(*) as dok'))->value('nid');
+            ?>
             <div class="row clearfix">
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="info-box bg-pink hover-expand-effect">
@@ -289,7 +314,7 @@
                         </div>
                         <div class="content">
                             <div class="text">JUMLAH DOKTER</div>
-                            <div class="number count-to" data-from="0" data-to="157" data-speed="1000" data-fresh-interval="20"></div>
+                            <div class="number count-to" data-from="0" data-to="{{ $dkt }}" data-speed="1000" data-fresh-interval="20"></div>
                         </div>
                     </div>
                 </div>
@@ -311,7 +336,8 @@
                         </div>
                         <div class="content">
                             <div class="text">JUMLAH PASIEN</div>
-                            <div class="number count-to" data-from="0" data-to="120" data-speed="1000" data-fresh-interval="20"></div>
+                           
+                            <div class="number count-to" data-from="0" data-to="{{ $cnt }}" data-speed="1000" data-fresh-interval="20"></div>
                         </div>
                     </div>
                 </div>

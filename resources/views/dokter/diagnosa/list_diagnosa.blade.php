@@ -183,13 +183,20 @@
                     <div class="btn-group user-helper-dropdown">
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                         <ul class="dropdown-menu pull-right">
-                            <li><a href="javascript:void(0);"><i class="material-icons">person</i>Profile</a></li>
-                            <li role="seperator" class="divider"></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">group</i>Followers</a></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">shopping_cart</i>Sales</a></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">favorite</i>Likes</a></li>
-                            <li role="seperator" class="divider"></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">input</i>Sign Out</a></li>
+                            <li>
+
+                              <a href="{{ route('logout') }}"
+                                  onclick="event.preventDefault();
+                                           document.getElementById('logout-form').submit();">
+                                  <i class="material-icons">input</i>Sign Out
+                              </a>
+
+                              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                  {{ csrf_field() }}
+                              </form>
+
+
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -197,26 +204,39 @@
             <!-- #User Info -->
             <!-- Menu -->
             <div class="menu">
-                <ul class="list">
+            <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
                     <li>
-                        <a href="index.html">
+                        <a href="{{ url('/') }}">
                             <i class="material-icons">home</i>
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="form-examples.html" class="menu-toggle">
+                    <li class="active">
+                        <a href="{{ route('pasien.index') }}" class="menu-toggle">
                             <i class="material-icons">assignment</i>
-                            <span>Forms</span>
+                            <span>Data Pasien</span>
                         </a>
 
                     </li>
-                    <li class="active">
-                        <a href="tables.html" class="menu-toggle">
+                    <li class="">
+                        <a href="{{ route('rekmed.index') }}" class="menu-toggle">
                             <i class="material-icons">view_list</i>
-                            <span>Tables</span>
+                            <span>Data Rekam Medis</span>
                         </a>
+                    </li>
+                    <li class="">
+                        @if(Auth::user()->hak_akses==2)
+                        <a href="{{ route('dokter.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Dokter</span>
+                        </a>
+                        @elseif(Auth::user()->hak_akses==3)
+                        <a href="{{ route('perawat.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Perawat</span>
+                        </a>
+                        @endif
                     </li>
                 </ul>
             </div>
@@ -254,8 +274,10 @@
                         <div class="body">
                         <form action='{{action("DiagnosaController@showdetail")}}' method='get'>
                          {{ csrf_field() }}
-                        <input type="text" name="search" value="{{ $cari }}">
+                         @if(Auth::user()->hak_akses==2)
+                        <input type="hidden" name="search" value="{{ $cari }}">
                         <button type="submit" class="btn btn-xm bg-green waves-effect"><i class="material-icons"></i>Tambah Diagnosa</button>
+                        @endif
                         </form>
                             <div class="table-responsive">
                                 <table class="table table-bordered table-striped table-hover dataTable js-exportable">
@@ -266,6 +288,7 @@
                                             <th>No Pasien</th>
                                             <th>Nama Pasien</th>
                                             <th>Nama Dokter</th>
+                                            <th>Gejala</th>
                                             <th>Tanggal Diagnosa</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -276,6 +299,7 @@
                                             <th>No Pasien</th>
                                             <th>Nama Pasien</th>
                                             <th>Nama Dokter</th>
+                                            <th>Gejala</th>
                                             <th>Tanggal Diagnosa</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -294,23 +318,30 @@
                                             <td>{{ $d->no_pasien }}</td>
                                             <td>{{ $namapasien }}</td>
                                             <td>{{ $namadokter }}</td>
+                                            <td>{{ $d->gejala }}</td>
                                             <td>{{ $d->created_at }}</td>
                                             <div class="form-group">
+                                           
                                             <form action="{{ route('diagnosa.destroy', ['diagnosa'=>$d->id_diagnosa]) }}" method="post">
                                             <td>
+                                            @if(Auth::user()->hak_akses==2)
 											<a href="{{ route('diagnosa.edit', ['diagnosa'=>$d->id_diagnosa]) }}" class="btn bg-orange btn-xs waves-effect">
 											<i class="material-icons">mode_edit</i>
                               				</a>
+                                            @endif
+                                            @if(Auth::user()->hak_akses==0)
                               				<input type="hidden" name="_method" value="DELETE">
                               				<input type="hidden" name="_token" value="{{ csrf_token() }}">
                                             <button type="submit" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
+                                            @endif
                                             </form>
-                                            
-                                            <form action="{{ action('DetailDiagnosaController@showformdetail', ['showformdetail'=>$d->id_diagnosa]) }}" method="post">
+                                            @if( Auth::user()->hak_akses==3)
+                                            <form action="{{ action('DetailDiagnosaController@showformdetail', ['showformdetail'=>$d->id_diagnosa]) }}" method="get">
                                             <input type="hidden" name="cari" value={{ $d->id_diagnosa }}>
                               				<input type="hidden" name="_token" value="{{ csrf_token() }}">
                                             <button type="submit" class="btn btn-xs bg-green waves-effect"><i class="material-icons">add</i></button>
                                             </form>
+                                            @endif
                                             </div>
                                           </td>
                                         </tr>

@@ -77,13 +77,20 @@
                     <div class="btn-group user-helper-dropdown">
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                         <ul class="dropdown-menu pull-right">
-                            <li><a href="javascript:void(0);"><i class="material-icons">person</i>Profile</a></li>
-                            <li role="seperator" class="divider"></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">group</i>Followers</a></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">shopping_cart</i>Sales</a></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">favorite</i>Likes</a></li>
-                            <li role="seperator" class="divider"></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">input</i>Sign Out</a></li>
+                            <li>
+
+                              <a href="{{ route('logout') }}"
+                                  onclick="event.preventDefault();
+                                           document.getElementById('logout-form').submit();">
+                                  <i class="material-icons">input</i>Sign Out
+                              </a>
+
+                              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                  {{ csrf_field() }}
+                              </form>
+
+
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -91,22 +98,47 @@
             <!-- #User Info -->
             <!-- Menu -->
             <div class="menu">
-                <ul class="list">
+            <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
-                    <li>
-                        <a href="index.html">
-                            <i class="material-icons">home</i>
-                            <span>Home</span>
-                        </a>
-                    </li>
-
-
                     <li class="active">
-                        <a href="javascript:void(0);" class="menu-toggle">
+                        <a href="{{ url('/') }}">
+                            <i class="material-icons">home</i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>             
+                    <li>
+                        <a href="{{ route('pasien.index') }}" class="menu-toggle">
                             <i class="material-icons">assignment</i>
-                            <span>Forms</span>
+                            <span>Data Pasien</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('rekmed.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Rekam Medis</span>
+                        </a>
+                    </li>   
+                    <li class="">
+                        @if(Auth::user()->hak_akses==2)
+                        <a href="{{ route('dokter.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Dokter</span>
+                        </a>
+                        @elseif(Auth::user()->hak_akses==3)
+                        <a href="{{ route('perawat.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Perawat</span>
+                        </a>
+                        @endif
+                    </li>
+                    @if(Auth::user()->hak_akses==2)
+                    <li class="">
+                        <a href="{{ route('masterpengajuan.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data BHP</span>
+                        </a>
+                    </li>
+                    @endif         
                 </ul>
             </div>
             <!-- #Menu -->
@@ -152,8 +184,8 @@
                           {{ csrf_field() }}
                           <?php
                           $kode = Auth::user()->id;
-                          $nid = DB::table('data_dokter')->select('nid')->where('id', $kode)->value('nid');
-                          $namadokter = DB::table('data_dokter')->select('nama_dokter')->where('nid', $nid)->value('nama_dokter');
+                          //$nid = DB::table('data_dokter')->select('nid')->value('nid');
+                          //$namadokter = DB::table('data_dokter')->select('nama_dokter')->where('nid', $nid)->value('nama_dokter');
                           $nip = DB::table('data_pasien')->select('nip')->where('no_pasien', $cari)->value('nip');
                           $nama=DB::table('data_pasien')->select('nama_pasien')->where('no_pasien', $cari)->value('nama_pasien');
                           ?>
@@ -164,7 +196,7 @@
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" name="id_diagnosa" class="form-control">
+                                                <input type="text" name="id_diagnosa" class="form-control" required>
                                             </div>
                                         </div>
                                     </div>
@@ -176,7 +208,7 @@
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" name="no_pasien" class="form-control" value="{{ $cari }}" readonly>
+                                                <input type="text" name="no_pasien" class="form-control" value="{{ $cari }}" required readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -188,19 +220,7 @@
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" name="nama_pasien" class="form-control" value="{{ $nama }}" readonly>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>NID</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" name="nid" class="form-control" value="{{ $nid }}"  readonly>
+                                                <input type="text" name="nama_pasien" class="form-control" required value="{{ $nama }}" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -211,9 +231,12 @@
                                     </div>
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" name="nama_dokter" class="form-control" value="{{ $namadokter }}" readonly>
-                                            </div>
+                                            <select name="nid" class="form-control show-tick" required>
+                                                <option>Pilih Dokter</option>
+                                                @foreach($dtr as $d)
+                                                    <option value="{{ $d->nid }}">{{ $d->nama_dokter }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -224,8 +247,8 @@
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" name="gejala" class="form-control" placeholder="Masukkan gejala">
-                                                  <input type="text" name="id_perawat" class="form-control" value="{{ $nip }}" readonly>
+                                                <input type="text" name="gejala" class="form-control" placeholder="Masukkan gejala" required>
+                                                  <input type="hidden" name="id_perawat" class="form-control" value="{{ $nip }}" readonly>
                                             </div>
                                         </div>
                                     </div>

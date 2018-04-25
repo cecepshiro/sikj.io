@@ -107,7 +107,7 @@ class DetailDiagnosaController extends Controller
     }
 
     public function showformdetail(Request $request){
-        $cari = $request-> cari;
+        $cari = $request->cari;
         $data = Diagnosa::where('id_diagnosa', $cari)->get();
         return view('dokter.detail.form_detail', compact('data'))->with('cari', $cari);
     }

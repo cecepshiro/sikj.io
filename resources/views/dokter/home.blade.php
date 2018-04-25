@@ -117,26 +117,47 @@
             <!-- #User Info -->
             <!-- Menu -->
             <div class="menu">
-                <ul class="list">
+            <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
                     <li class="active">
-                        <a href="index.html">
+                        <a href="{{ url('/') }}">
                             <i class="material-icons">home</i>
                             <span>Dashboard</span>
                         </a>
-                    </li>
+                    </li>             
                     <li>
-                        <a href="form-examples.html" class="menu-toggle">
+                        <a href="{{ route('pasien.index') }}" class="menu-toggle">
                             <i class="material-icons">assignment</i>
-                            <span>Forms</span>
+                            <span>Data Pasien</span>
                         </a>
                     </li>
                     <li>
-                        <a href="tables.html" class="menu-toggle">
+                        <a href="{{ route('rekmed.index') }}" class="menu-toggle">
                             <i class="material-icons">view_list</i>
-                            <span>Tables</span>
+                            <span>Rekam Medis</span>
+                        </a>
+                    </li>   
+                    <li class="">
+                        @if(Auth::user()->hak_akses==2)
+                        <a href="{{ route('dokter.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Dokter</span>
+                        </a>
+                        @elseif(Auth::user()->hak_akses==3)
+                        <a href="{{ route('perawat.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Perawat</span>
+                        </a>
+                        @endif
+                    </li>
+                    @if(Auth::user()->hak_akses==2)
+                    <li class="">
+                        <a href="{{ route('masterpengajuan.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data BHP</span>
                         </a>
                     </li>
+                    @endif         
                 </ul>
             </div>
             <!-- #Menu -->

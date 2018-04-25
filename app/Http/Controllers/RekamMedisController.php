@@ -6,6 +6,7 @@ use App\Diagnosa;
 use App\Pasien;
 use App\DetailDiagnosa;
 use App\Dokter;
+use DB;
 use App\Perawat;
 use App\Pegawai;
 
@@ -20,7 +21,8 @@ class RekamMedisController extends Controller
      */
     public function index()
     {
-        return view('dokter.rekmed.list_rm');
+        $data['data']=Pasien::get();
+        return view('dokter.rekmed.index_rm', $data);
     }
 
     /**

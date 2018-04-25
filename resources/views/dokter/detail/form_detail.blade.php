@@ -77,13 +77,16 @@
                     <div class="btn-group user-helper-dropdown">
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                         <ul class="dropdown-menu pull-right">
-                            <li><a href="javascript:void(0);"><i class="material-icons">person</i>Profile</a></li>
-                            <li role="seperator" class="divider"></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">group</i>Followers</a></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">shopping_cart</i>Sales</a></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">favorite</i>Likes</a></li>
-                            <li role="seperator" class="divider"></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">input</i>Sign Out</a></li>
+                            <li>
+                              <a href="{{ route('logout') }}"
+                                  onclick="event.preventDefault();
+                                           document.getElementById('logout-form').submit();">
+                                  <i class="material-icons">input</i>Sign Out
+                              </a>
+                              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                  {{ csrf_field() }}
+                              </form>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -91,22 +94,47 @@
             <!-- #User Info -->
             <!-- Menu -->
             <div class="menu">
-                <ul class="list">
+            <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
-                    <li>
-                        <a href="index.html">
-                            <i class="material-icons">home</i>
-                            <span>Home</span>
-                        </a>
-                    </li>
-                    
-                
                     <li class="active">
-                        <a href="javascript:void(0);" class="menu-toggle">
+                        <a href="{{ url('/') }}">
+                            <i class="material-icons">home</i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>             
+                    <li>
+                        <a href="{{ route('pasien.index') }}" class="menu-toggle">
                             <i class="material-icons">assignment</i>
-                            <span>Forms</span>
+                            <span>Data Pasien</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('rekmed.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Rekam Medis</span>
+                        </a>
+                    </li>   
+                    <li class="">
+                        @if(Auth::user()->hak_akses==2)
+                        <a href="{{ route('dokter.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Dokter</span>
+                        </a>
+                        @elseif(Auth::user()->hak_akses==3)
+                        <a href="{{ route('perawat.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Perawat</span>
+                        </a>
+                        @endif
+                    </li>
+                    @if(Auth::user()->hak_akses==2)
+                    <li class="">
+                        <a href="{{ route('masterpengajuan.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data BHP</span>
+                        </a>
+                    </li>
+                    @endif         
                 </ul>
             </div>
             <!-- #Menu -->
@@ -169,7 +197,7 @@
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" name="id_diagnosa" value="{{ $cari }}" readonly class="form-control">
+                                                <input type="text" name="id_diagnosa" value="{{ $cari }}" readonly class="form-control" required>
                                             </div>
                                         </div>
                                     </div>
@@ -181,7 +209,7 @@
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" name="nama_penyakit" class="form-control">
+                                                <textarea name="nama_penyakit" class="form-control" required></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -193,7 +221,7 @@
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" name="nama_obat" class="form-control">
+                                                <textarea name="nama_obat" class="form-control" required></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -204,7 +232,7 @@
                                     </div>
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
-                                    <select class="form-control show-tick" name="sifat">
+                                    <select class="form-control show-tick" name="sifat" required>
                                         <option value="">-- Please select --</option>
                                         <option value="Awal">Awal</option>
                                         <option value="Akhir">Akhir</option>
@@ -219,7 +247,7 @@
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" name="keterangan" class="form-control" placeholder="keterangan">
+                                                <input type="text" name="keterangan" class="form-control" placeholder="keterangan" required>
                                             </div>
                                         </div>
                                     </div>

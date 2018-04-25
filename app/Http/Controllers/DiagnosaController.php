@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Dokter;
 use App\Diagnosa;
 use App\Pasien;
 use Illuminate\Http\Request;
@@ -26,10 +26,9 @@ class DiagnosaController extends Controller
      */
     public function create()
     {
-        $data['data']=Diagnosa::get();
-        return view('dokter.diagnosa.form_diagnosa', $data);
+        $data['data']=Dokter::get();
+        return view('dokter.diagnosa.list_diagnosa', $data);
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -111,6 +110,7 @@ class DiagnosaController extends Controller
     public function showdetail(Request $request){
         $cari = $request->get('search');
         $data = Pasien::where('no_pasien', $cari)->get();
-        return view('dokter.diagnosa.form_diagnosa', compact('data'))->with('cari', $cari);
+        $dtr =  Dokter::get();
+        return view('dokter.diagnosa.form_diagnosa', compact('data'),compact('dtr'))->with('cari', $cari);
     }
 }

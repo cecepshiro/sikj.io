@@ -1,10 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>Data Dokter | Hospital App</title>
+    <title>Data Rekam Medis | Hospital App</title>
       @extends('layouts.stylecss')
 </head>
 
@@ -184,14 +185,18 @@
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                         <ul class="dropdown-menu pull-right">
                             <li>
+
                               <a href="{{ route('logout') }}"
                                   onclick="event.preventDefault();
                                            document.getElementById('logout-form').submit();">
                                   <i class="material-icons">input</i>Sign Out
                               </a>
+
                               <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                   {{ csrf_field() }}
                               </form>
+
+
                             </li>
                         </ul>
                     </div>
@@ -200,27 +205,28 @@
             <!-- #User Info -->
             <!-- Menu -->
             <div class="menu">
-            <ul class="list">
+                <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
-                    <li class="">
+                    <li>
                         <a href="{{ url('/') }}">
                             <i class="material-icons">home</i>
                             <span>Dashboard</span>
                         </a>
-                    </li>             
-                    <li>
+                    </li>
+                    <li class="">
                         <a href="{{ route('pasien.index') }}" class="menu-toggle">
                             <i class="material-icons">assignment</i>
                             <span>Data Pasien</span>
                         </a>
+
                     </li>
-                    <li>
+                    <li class="active">
                         <a href="{{ route('rekmed.index') }}" class="menu-toggle">
                             <i class="material-icons">view_list</i>
-                            <span>Rekam Medis</span>
+                            <span>Data Rekam Medis</span>
                         </a>
-                    </li>   
-                    <li class="active">
+                    </li>
+                    <li class="">
                         @if(Auth::user()->hak_akses==2)
                         <a href="{{ route('dokter.index') }}" class="menu-toggle">
                             <i class="material-icons">view_list</i>
@@ -240,7 +246,7 @@
                             <span>Data BHP</span>
                         </a>
                     </li>
-                    @endif         
+                    @endif
                 </ul>
             </div>
             <!-- #Menu -->
@@ -264,7 +270,7 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                DATA DOKTER
+                                DATA REKAM MEDIS
                             </h2>
                             <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
@@ -281,61 +287,53 @@
                         </div>
                         <div class="body">
                             <div class="table-responsive">
+                            @if(Auth::user()->hak_akses==4)
+                            <div>
+                                <a href="{{ route('pasien.create') }}" class="btn bg-green btn-md waves-effect">
+                                <i class="material-icons"></i>Tambah Pasien</a>
+                            </div>
+                            @endif
                                 <table class="table table-bordered table-striped table-hover dataTable js-basic-example">
                                     <thead>
                                         <tr>
-                                            <th>NID</th>
-                                            <th>Nama Dokter</th>
+                                            <th>No Pasien</th>
+                                            <th>Nama Pasien</th>
                                             <th>Tanggal Lahir</th>
                                             <th>Tempat Lahir</th>
                                             <th>Jenis Kelamin</th>
-                                            <th>Spesialis</th>
-                                            @if(Auth::user()->hak_akses==0)
+                                            <th>No Telp</th>
                                             <th>Aksi</th>
-                                            @endif
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                          <th>NID</th>
-                                          <th>Nama Dokter</th>
-                                          <th>Tanggal Lahir</th>
-                                          <th>Tempat Lahir</th>
-                                          <th>Jenis Kelamin</th>
-                                          <th>Spesialis</th> 
-                                          @if(Auth::user()->hak_akses==0)
-                                          <th>Aksi</th>
-                                          @endif
+                                            <th>No Pasien</th>
+                                            <th>Nama Pasien</th>
+                                            <th>Tanggal Lahir</th>
+                                            <th>Tempat Lahir</th>
+                                            <th>Jenis Kelamin</th>
+                                            <th>No Telp</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
 										@forelse($data as $d)
                                         <tr>
-                                             <td>{{ $d->nid}}</td>
-                                            <td>{{ $d->nama_dokter}}</td>
+                                            <td>{{ $d->no_pasien}}</td>
+                                            <td>{{ $d->nama_pasien}}</td>
                                             <td>{{ $d->tgl_lahir}}</td>
                                             <td>{{ $d->tempat_lahir}}</td>
                                             <td>{{ $d->jenis_kelamin}}</td>
-                                            <td>{{ $d->spesialis}}</td>
-                                            @if(Auth::user()->hak_akses==0)
-                                            <form action="{{ route('dokter.destroy', ['dokter'=>$d->nid]) }}" method="post">
-                              							<div class="form-group">
+                                            <td>{{ $d->no_telp}}</td>
                                             <td>
-                              							<a href="{{ route('dokter.edit', ['dokter'=>$d->nid]) }}" class="btn bg-orange btn-xs waves-effect">
-                                              <i class="material-icons">mode_edit</i>
-                              							</a>
-                              							<input type="hidden" name="_method" value="DELETE">
-                              							<input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                            <button type="submit" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            </form>
-                                            @endif
-
+                                            <a href="{{ route('rekmed.show', ['rekmed'=>$d->no_pasien]) }}" class="btn bg-grey btn-xs waves-effect">
+                                                    <i class="material-icons"></i>Rekam Medis</a>
                                           </td>
                                         </tr>
 										@empty
                                         <tr>
-                              						  <td colspan="10">Data Kosong</td>
-                              					</tr>
+                              			  <td colspan="10">Data Kosong</td>
+                              			</tr>
                                         @endforelse
                                         </tr>
                                     </tbody>
@@ -348,8 +346,7 @@
             <!-- #END# Exportable Table -->
         </div>
     </section>
-
-      @extends('layouts.stylejs')
+    @extends('layouts.stylejs')
 </body>
 
 </html>
