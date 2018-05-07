@@ -96,7 +96,7 @@
             <div class="menu">
             <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
-                    <li class="">
+                    <li class="active">
                         <a href="{{ url('/') }}">
                             <i class="material-icons">home</i>
                             <span>Dashboard</span>
@@ -127,8 +127,8 @@
                         </a>
                         @endif
                     </li>
-                    @if(Auth::user()->hak_akses==2)
-                    <li class="active">
+                    @if(Auth::user()->hak_akses==2 || Auth::user()->hak_akses==1)
+                    <li class="">
                         <a href="{{ route('masterpengajuan.index') }}" class="menu-toggle">
                             <i class="material-icons">view_list</i>
                             <span>Data BHP</span>
@@ -141,9 +141,11 @@
             <!-- Footer -->
             <div class="legal">
                 <div class="copyright">
-                    &copy; 2018 <a href="javascript:void(0);">Sistem Informasi Kateterisasi Jantung</a>.
+                    &copy; 2018 <a href="javascript:void(0);">Sistem Informasi <br>Kateterisasi Jantung</a>.
                 </div>
-                
+                <div class="version">
+                    <b>Developed by: </b> Anak Ayam Studio
+                </div>
             </div>
             <!-- #Footer -->
         </aside>
@@ -176,10 +178,12 @@
                         <div class="body">
                             <div class="table-responsive">
                             <div>
+                            @if(Auth::user()->hak_akses==2)
                                 <a href="{{ route('masterpengajuan.create') }}" class="btn bg-green btn-md waves-effect">
                                 <i class="material-icons"></i>Buat Pegajuan</a>
                                 <br>
                                 <br>
+                            @endif
                             </div>
                                 <table class="table table-bordered table-striped table-hover dataTable js-basic-example">
                                     <thead>

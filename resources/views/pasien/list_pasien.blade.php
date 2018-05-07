@@ -235,7 +235,7 @@
                         </a>
                         @endif
                     </li>
-                    @if(Auth::user()->hak_akses==2)
+                    @if(Auth::user()->hak_akses==2 || Auth::user()->hak_akses==1)
                     <li class="">
                         <a href="{{ route('masterpengajuan.index') }}" class="menu-toggle">
                             <i class="material-icons">view_list</i>
@@ -249,9 +249,11 @@
             <!-- Footer -->
             <div class="legal">
                 <div class="copyright">
-                    &copy; 2018 <a href="javascript:void(0);">Sistem Informasi Kateterisasi Jantung</a>.
+                    &copy; 2018 <a href="javascript:void(0);">Sistem Informasi <br>Kateterisasi Jantung</a>.
                 </div>
-
+                <div class="version">
+                    <b>Developed by: </b> Anak Ayam Studio
+                </div>
             </div>
             <!-- #Footer -->
         </aside>

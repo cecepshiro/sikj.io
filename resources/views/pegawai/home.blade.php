@@ -6,30 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>Dashboard Pegawai | Hospital App</title>
-    <!-- Favicon-->
-    <!-- <link rel="icon" href="favicon.ico" type="image/x-icon"> -->
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
-
-    <!-- Bootstrap Core Css -->
-    <link href="{{ asset('/backend/plugins/bootstrap/css/bootstrap.css') }}" rel="stylesheet">
-
-    <!-- Waves Effect Css -->
-    <link href="{{ asset('/backend/plugins/node-waves/waves.css') }}" rel="stylesheet" />
-
-    <!-- Animation Css -->
-    <link href="{{ asset('/backend/plugins/animate-css/animate.css') }}" rel="stylesheet" />
-
-    <!-- Morris Chart Css-->
-    <link href="{{ asset('/backend/plugins/morrisjs/morris.css') }}" rel="stylesheet" />
-
-       <!-- Custom Css -->
-    <link href="{{ asset('/backend/css/style.css') }}" rel="stylesheet">
-
-    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
-    <link href="{{ asset('/backend/css/themes/all-themes.css') }}" rel="stylesheet" />
+    @extends('layouts.stylecss')
 </head>
 
 <body class="theme-green">
@@ -117,35 +94,58 @@
             <!-- #User Info -->
             <!-- Menu -->
             <div class="menu">
-                <ul class="list">
+            <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
                     <li class="active">
-                        <a href="index.html">
+                        <a href="{{ url('/') }}">
                             <i class="material-icons">home</i>
                             <span>Dashboard</span>
                         </a>
-                    </li>
+                    </li>             
                     <li>
-                        <a href="form-examples.html" class="menu-toggle">
+                        <a href="{{ route('pasien.index') }}" class="menu-toggle">
                             <i class="material-icons">assignment</i>
-                            <span>Forms</span>
+                            <span>Data Pasien</span>
                         </a>
                     </li>
                     <li>
-                        <a href="tables.html" class="menu-toggle">
+                        <a href="{{ route('rekmed.index') }}" class="menu-toggle">
                             <i class="material-icons">view_list</i>
-                            <span>Tables</span>
+                            <span>Rekam Medis</span>
+                        </a>
+                    </li>   
+                    <li class="">
+                        @if(Auth::user()->hak_akses==2)
+                        <a href="{{ route('dokter.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Dokter</span>
+                        </a>
+                        @elseif(Auth::user()->hak_akses==3)
+                        <a href="{{ route('perawat.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Perawat</span>
+                        </a>
+                        @endif
+                    </li>
+                    @if(Auth::user()->hak_akses==2 || Auth::user()->hak_akses==1)
+                    <li class="">
+                        <a href="{{ route('masterpengajuan.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data BHP</span>
                         </a>
                     </li>
+                    @endif         
                 </ul>
             </div>
             <!-- #Menu -->
             <!-- Footer -->
             <div class="legal">
                 <div class="copyright">
-                    &copy; 2018 <a href="javascript:void(0);">Sistem Informasi - Kateterisasi Jantung</a>.
+                    &copy; 2018 <a href="javascript:void(0);">Sistem Informasi <br>Kateterisasi Jantung</a>.
                 </div>
-
+                <div class="version">
+                    <b>Developed by: </b> Anak Ayam Studio
+                </div>
             </div>
             <!-- #Footer -->
         </aside>
@@ -239,40 +239,7 @@
         </div>
     </section>
 
-     <!-- Jquery Core Js -->
-    <script src="{{ asset('/backend/plugins/jquery/jquery.min.js') }}"></script>
-
-    <!-- Bootstrap Core Js -->
-    <script src="{{ asset('/backend/plugins/bootstrap/js/bootstrap.js') }}"></script>
-
-    <!-- Select Plugin Js -->
-    <script src="{{ asset('/backend/plugins/bootstrap-select/js/bootstrap-select.js') }}"></script>
-
-    <!-- Slimscroll Plugin Js -->
-    <script src="{{ asset('/backend/plugins/jquery-slimscroll/jquery.slimscroll.js') }}"></script>
-
-    <!-- Waves Effect Plugin Js -->
-    <script src="{{ asset('/backend/plugins/node-waves/waves.js') }}"></script>
-    <!-- Jquery CountTo Plugin Js -->
-    <script src="{{ asset('/backend/plugins/jquery-countto/jquery.countTo.js') }}"></script>
-
-    <!-- Morris Plugin Js -->
-    <script src="{{ asset('/backend/plugins/raphael/raphael.min.js') }}"></script>
-    <script src="{{ asset('/backend/plugins/morrisjs/morris.js') }}"></script>
-
-    <!-- ChartJs -->
-    <script src="plugins/chartjs/Chart.bundle.js"></script>
-
-
-    <!-- Sparkline Chart Plugin Js -->
-    <script src="{{ asset('/backend/plugins/jquery-sparkline/jquery.sparkline.js') }}"></script>
-
-     <!-- Custom Js -->
-    <script src="{{ asset('/backend/js/admin.js') }}"></script>
-    <script src="{{ asset('/backend/js/pages/index.js') }}"></script>
-
-      <!-- Demo Js -->
-    <script src="{{ asset('/backend/js/demo.js') }}"></script>
+       @extends('layouts.stylejs')
 </body>
 
 </html>
