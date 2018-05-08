@@ -46,7 +46,7 @@
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="index.html">APLIKASI KATETERISASI JANTUNG</a>
+                <a class="navbar-brand" href="{{ url('/') }}">APLIKASI KATETERISASI JANTUNG</a>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
@@ -69,21 +69,28 @@
             <!-- User Info -->
             <div class="user-info">
                 <div class="image">
-                    <img src="images/user.png" width="48" height="48" alt="User" />
+                    <img src="{{ asset('/backend/images/user.png') }}" width="48" height="48" alt="User" />
                 </div>
                 <div class="info-container">
-                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">John Doe</div>
-                    <div class="email">john.doe@example.com</div>
+                     <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}</div>
+                    <div class="email">{{ Auth::user()->email }}</div>
                     <div class="btn-group user-helper-dropdown">
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                         <ul class="dropdown-menu pull-right">
-                            <li><a href="javascript:void(0);"><i class="material-icons">person</i>Profile</a></li>
-                            <li role="seperator" class="divider"></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">group</i>Followers</a></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">shopping_cart</i>Sales</a></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">favorite</i>Likes</a></li>
-                            <li role="seperator" class="divider"></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">input</i>Sign Out</a></li>
+                            <li>
+
+                              <a href="{{ route('logout') }}"
+                                  onclick="event.preventDefault();
+                                           document.getElementById('logout-form').submit();">
+                                  <i class="material-icons">input</i>Sign Out
+                              </a>
+
+                              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                  {{ csrf_field() }}
+                              </form>
+
+
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -94,23 +101,81 @@
                 <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
                     <li>
-                        <a href="index.html">
+                        <a href="{{ url('/') }}">
                             <i class="material-icons">home</i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li>
-                        <a href="form-examples.html" class="menu-toggle">
+                        <a href="{{ route('pasien.index') }}" class="menu-toggle">
                             <i class="material-icons">assignment</i>
-                            <span>Forms</span>
+                            <span>Data Pasien</span>
                         </a>
 
                     </li>
-                    <li class="active">
-                        <a href="tables.html" class="menu-toggle">
+                    <li class="">
+                        <a href="{{ route('rekmed.index') }}" class="menu-toggle">
                             <i class="material-icons">view_list</i>
-                            <span>Tables</span>
+                            <span>Data Rekam Medis</span>
                         </a>
+                    </li>
+                    <li class="">
+                        @if(Auth::user()->hak_akses==2 || Auth::user()->hak_akses==0)
+                        <a href="{{ route('dokter.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Dokter</span>
+                        </a>
+                        @endif                        
+                    </li>
+                    <li class="">
+                        @if(Auth::user()->hak_akses==3 || Auth::user()->hak_akses==0)
+                        <a href="{{ route('perawat.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Perawat</span>
+                        </a>
+                        @endif
+                    </li>
+                    <li class="">
+                        @if(Auth::user()->hak_akses==0)
+                        <a href="{{ route('pegawai.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Pegawai</span>
+                        </a>
+                        @endif
+                    </li>
+                    
+                    <li class="">
+                        @if(Auth::user()->hak_akses==2 || Auth::user()->hak_akses==1 || Auth::user()->hak_akses==0)
+                        <a href="{{ route('masterpengajuan.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data BHP</span>
+                        </a>
+                        @endif
+                    </li>
+                   
+                    <li class="active">
+                        @if(Auth::user()->hak_akses==0)
+                        <a href="{{ route('jenis_pasien.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Jenis Pasien</span>
+                        </a>
+                        @endif
+                    </li>
+                    <li class="">
+                        @if(Auth::user()->hak_akses==0)
+                        <a href="{{ route('statuspegawai.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Status Pegawai</span>
+                        </a>
+                        @endif
+                    </li>
+                    <li class="">
+                        @if(Auth::user()->hak_akses==0)
+                        <a href="{{ route('statuspegawai.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Status Pegawai</span>
+                        </a>
+                        @endif
                     </li>
                 </ul>
             </div>
@@ -152,6 +217,13 @@
                         </div>
                         <div class="body">
                             <div class="table-responsive">
+                            @if(Auth::user()->hak_akses==0)
+                            <div>
+                                <a href="{{ route('jenis_pasien.create') }}" class="btn bg-green btn-md waves-effect">
+                                <i class="material-icons"></i>Tambah Jenis Pasien</a>
+                            </div>
+                            <br>
+                            @endif
                                 <table class="table table-bordered table-striped table-hover dataTable js-basic-example">
                                     <thead>
                                         <tr>
@@ -168,212 +240,28 @@
                                         </tr>
                                     </tfoot>
                                     <tbody>
+                                        @forelse($data as $d)
                                         <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-
+                                            <td>{{ $d->id_jenis_pasien }}</td>
+                                            <td>{{ $d->jenis_pasien }}</td>
+                                            <form action="{{ route('jenis_pasien.destroy', ['jenis_pasien'=>$d->id_jenis_pasien]) }}" method="post">
+                              				<div class="form-group">
+                                            <td>
+                                            @if(Auth::user()->hak_akses==0)
+                              				<a href="{{ route('jenis_pasien.edit', ['jenis_pasien'=>$d->id_jenis_pasien]) }}" class="btn bg-orange btn-xs waves-effect">
+                                            <i class="material-icons">mode_edit</i>
+                              				</a>
+                              				<input type="hidden" name="_method" value="DELETE">
+                              				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                            <button type="submit" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
+                                            @endif
+                                            </form>
                                         </tr>
+                                        @empty
                                         <tr>
-                                            <td>Garrett Winters</td>
-                                            <td>Accountant</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Ashton Cox</td>
-                                            <td>Junior Technical Author</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Cedric Kelly</td>
-                                            <td>Senior Javascript Developer</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Airi Satou</td>
-                                            <td>Accountant</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Brielle Williamson</td>
-                                            <td>Integration Specialist</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Herrod Chandler</td>
-                                            <td>Sales Assistant</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Rhona Davidson</td>
-                                            <td>Integration Specialist</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Colleen Hurst</td>
-                                            <td>Javascript Developer</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Sonya Frost</td>
-                                            <td>Software Engineer</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Jena Gaines</td>
-                                            <td>Office Manager</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Quinn Flynn</td>
-                                            <td>Support Lead</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Charde Marshall</td>
-                                            <td>Regional Director</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Haley Kennedy</td>
-                                            <td>Senior Marketing Designer</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Tatyana Fitzpatrick</td>
-                                            <td>Regional Director</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Michael Silva</td>
-                                            <td>Marketing Designer</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Paul Byrd</td>
-                                            <td>Chief Financial Officer (CFO)</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Gloria Little</td>
-                                            <td>Systems Administrator</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Bradley Greer</td>
-                                            <td>Software Engineer</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Dai Rios</td>
-                                            <td>Personnel Lead</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Jenette Caldwell</td>
-                                            <td>Development Lead</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Yuri Berry</td>
-                                            <td>Chief Marketing Officer (CMO)</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Caesar Vance</td>
-                                            <td>Pre-Sales Support</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Doris Wilder</td>
-                                            <td>Sales Assistant</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Angelica Ramos</td>
-                                            <td>Chief Executive Officer (CEO)</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Gavin Joyce</td>
-                                            <td>Developer</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Jennifer Chang</td>
-                                            <td>Regional Director</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Brenden Wagner</td>
-                                            <td>Software Engineer</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Fiona Green</td>
-                                            <td>Chief Operating Officer (COO)</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Shou Itou</td>
-                                            <td>Regional Marketing</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Michelle House</td>
-                                            <td>Integration Specialist</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Suki Burks</td>
-                                            <td>Developer</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        <tr>
-                                            <td>Prescott Bartlett</td>
-                                            <td>Technical Author</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Gavin Cortez</td>
-                                            <td>Team Leader</td>
-                                            <td><button type="button" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
-                                            <button type="button" class="btn bg-orange btn-xs waves-effect"><i class="material-icons">mode_edit</i></button></td>
-                                        </tr>
-
-                                        </tr>
+                              			  <td colspan="2">Data Kosong</td>
+                              			</tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>

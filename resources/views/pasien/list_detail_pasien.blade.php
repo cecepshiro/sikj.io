@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>Form Dokter</title>
+    <title>Detail Pasien</title>
       @extends('layouts.stylecss')
 </head>
 
@@ -106,7 +106,7 @@
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    <li>
+                    <li class="active">
                         <a href="{{ route('pasien.index') }}" class="menu-toggle">
                             <i class="material-icons">assignment</i>
                             <span>Data Pasien</span>
@@ -119,7 +119,7 @@
                             <span>Data Rekam Medis</span>
                         </a>
                     </li>
-                    <li class="active">
+                    <li class="">
                         @if(Auth::user()->hak_akses==2 || Auth::user()->hak_akses==0)
                         <a href="{{ route('dokter.index') }}" class="menu-toggle">
                             <i class="material-icons">view_list</i>
@@ -207,7 +207,7 @@
                         <div class="header">
 
                             <h2>
-                                FORM DOKTER
+                                DETAIL PASIEN
                             </h2>
                             <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
@@ -218,29 +218,48 @@
                             </ul>
                         </div>
                         <div class="body">
-						 <form method="POST" action="{{ route('dokter.store') }}" enctype="multipart/form-data">
+						<form method="POST" action="{{ route('pasien.update', ['pasien'=> $data['no_pasien']]) }}" enctype="multipart/form-data">
+                        <input type="hidden" name="_method" value="PATCH">
                         {{ csrf_field() }}
                             <div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Nomor Induk Dokter</label>
+                                        <label>Nomor Pasien</label>
                                     </div>
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" id="email_address_2" class="form-control" name="nid" placeholder="Enter your name">
+                                                <input type="text" id="email_address_2" class="form-control" name="no_pasien" value="{{ $data->no_pasien }}" readonly placeholder="Enter your name">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                  <div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Nama Dokter</label>
+                                        <label>Nama Pasien</label>
                                     </div>
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" id="email_address_2" class="form-control" name="nama_dokter" placeholder="Enter your name">
+                                                <input type="text" id="email_address_2" readonly class="form-control" name="nama_pasien"  value="{{ $data->nama_pasien }}" placeholder="Enter your name">
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                 <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label>Jenis Pasien</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                   <select name="id_jenis_pasien" class="form-control show-tick" disable>
+                                      <option value="">-- Please select --</option>
+                                      @foreach($items as $item)
+                                      @if($item->id_jenis_pasien == $data->id_jenis_pasien)
+                                        <option value="{{ $item->id_jenis_pasien }}" selected readonly>{{ $item->jenis_pasien }}</option>
+                                      @endif
+                                        <option value="{{ $item->id_jenis_pasien }}" readonly>{{ $item->jenis_pasien }}</option>
+                                      @endforeach
+                                    </select>
                                         </div>
                                     </div>
                                 </div>
@@ -251,7 +270,7 @@
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" name="tgl_lahir" class="form-control" placeholder="Please choose a date...">
+                                                <input type="text" readonly name="tgl_lahir"  value="{{ $data->tgl_lahir }}" class="form-control" placeholder="Please choose a date...">
                                             </div>
                                         </div>
                                     </div>
@@ -263,7 +282,7 @@
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" name="tempat_lahir" id="email_address_2" class="form-control" placeholder="Enter your name">
+                                                <input type="text" readonly name="tempat_lahir" id="email_address_2"  value="{{ $data->tempat_lahir }}" class="form-control" placeholder="Enter your name">
                                             </div>
                                         </div>
                                     </div>
@@ -275,7 +294,7 @@
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" name="umur" id="email_address_2" class="form-control" placeholder="Enter your name">
+                                                <input type="text" name="umur" readonly id="email_address_2"  value="{{ $data->umur }}" class="form-control" placeholder="Enter your name">
                                             </div>
                                         </div>
                                     </div>
@@ -288,11 +307,21 @@
                                         <div class="form-group">
                                             <div class="form-line">
                                  <div class="demo-radio-button">
-                                <input name="jenis_kelamin" type="radio" value="Laki-Laki" id="radio_1"  />
-                                <label for="radio_1">Laki-Laki</label>
-                                <input name="jenis_kelamin" type="radio" value="Perempuan" id="radio_2" />
-                                <label for="radio_2">Perempuan</label>
-                                <input name="group1" type="radio" class="with-gap" id="radio_3" />
+                                @if($data->jenis_kelamin == 'Laki-Laki')
+                                  <input name="jenis_kelamin" type="radio" value="Laki-Laki" id="radio_1" checked readonly/>
+                                  <label for="radio_1">Laki-Laki</label>
+                                  <input name="jenis_kelamin" type="radio" value="Perempuan" id="radio_2" readonly/>
+                                  <label for="radio_2">Perempuan</label>
+                                  <input name="group1" type="radio" class="with-gap" id="radio_3" readonly/>
+                                @elseif($data->jenis_kelamin == 'Perempuan')
+                                  <input name="jenis_kelamin" type="radio" value="Laki-Laki" id="radio_1"  readonly />
+                                  <label for="radio_1">Laki-Laki</label>
+                                  <input name="jenis_kelamin" type="radio" value="Perempuan" id="radio_2" readonly checked/>
+                                  <label for="radio_2">Perempuan</label>
+                                  <input name="group1" type="radio" class="with-gap" id="radio_3" readonly/>
+                                @endif
+
+
                             </div>
                                             </div>
                                         </div>
@@ -305,7 +334,7 @@
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                    <textarea rows="4" name="alamat" class="form-control no-resize auto-growth" placeholder="Please type what you want... And please don't forget the ENTER key press multiple times :)"></textarea>
+                                    <textarea rows="4" name="alamat" readonly class="form-control no-resize auto-growth"  placeholder="Please type what you want... And please don't forget the ENTER key press multiple times :)">{{ $data->alamat }}</textarea>
                                 </div>
                                         </div>
                                     </div>
@@ -317,22 +346,13 @@
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" name="no_telp" id="email_address_2" class="form-control" placeholder="Enter your name">
-												                        <input type="text" name="id" id="email_address_2" class="form-control" placeholder="ID Dokter" value="{{ Auth::user()->id }}">
+                                              <?php
+                                              $kode = Auth::user()->id;
+                                              $nip = DB::table('data_pegawai')->select('nip')->where('id', $kode)->value('nip');
+                                              ?>
+                                                <input type="text" readonly name="no_telp" id="email_address_2"  value="{{ $data->no_telp }}" class="form-control" placeholder="Enter your name">
+												<input type="hidden"  name="nip" id="email_address_2" class="form-control" placeholder="ID Pendaftar" value="{{ $data->nip }}" readonly>
 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Spesialis</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" name="spesialis" class="form-control"  placeholder="Dokter Spesialis">
                                             </div>
                                         </div>
                                     </div>
@@ -341,8 +361,8 @@
 
                                 <div class="row clearfix">
                                     <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4">
-                                       <input type="submit" class="btn btn-primary waves-effect" value="SIMPAN">
-                                       <a href="{{ route('dokter.index') }}" type="button" class="btn btn-danger waves-effect">BATAL</button></a>
+                                       <!-- <input type="submit" class="btn btn-primary waves-effect" value="SIMPAN"> -->
+                                       <a href="{{ route('pasien.index') }}" type="button" class="btn btn-primary waves-effect">KEMBALI</button></a>
                                     </div>
                                 </div>
                         </div>
@@ -357,6 +377,6 @@
         </div>
     </section>
 
-      @extends('layouts.stylejs')
+    @extends('layouts.stylejs')
 </body>
 </html>

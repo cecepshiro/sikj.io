@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>Form Dokter</title>
+    <title>Form Ubah Jenis Pasien</title>
       @extends('layouts.stylecss')
 </head>
 
@@ -69,10 +69,10 @@
             <!-- User Info -->
             <div class="user-info">
                 <div class="image">
-                     <img src="{{ asset('/backend/images/user.png') }}" width="48" height="48" alt="User" />
+                    <img src="{{ asset('/backend/images/user.png') }}" width="48" height="48" alt="User" />
                 </div>
                 <div class="info-container">
-                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}</div>
+                     <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}</div>
                     <div class="email">{{ Auth::user()->email }}</div>
                     <div class="btn-group user-helper-dropdown">
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
@@ -119,7 +119,7 @@
                             <span>Data Rekam Medis</span>
                         </a>
                     </li>
-                    <li class="active">
+                    <li class="">
                         @if(Auth::user()->hak_akses==2 || Auth::user()->hak_akses==0)
                         <a href="{{ route('dokter.index') }}" class="menu-toggle">
                             <i class="material-icons">view_list</i>
@@ -153,7 +153,7 @@
                         @endif
                     </li>
                    
-                    <li class="">
+                    <li class="active">
                         @if(Auth::user()->hak_akses==0)
                         <a href="{{ route('jenis_pasien.index') }}" class="menu-toggle">
                             <i class="material-icons">view_list</i>
@@ -207,7 +207,7 @@
                         <div class="header">
 
                             <h2>
-                                FORM DOKTER
+                                FORM JENIS PASIEN
                             </h2>
                             <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
@@ -218,138 +218,43 @@
                             </ul>
                         </div>
                         <div class="body">
-						 <form method="POST" action="{{ route('dokter.store') }}" enctype="multipart/form-data">
+                        <form method="POST" action="{{ route('jenis_pasien.update', ['jenis_pasien'=> $data['id_jenis_pasien']]) }}" enctype="multipart/form-data">
+                        <input type="hidden" name="_method" value="PATCH">
                         {{ csrf_field() }}
                             <div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Nomor Induk Dokter</label>
+                                        <label>ID Jenis Pasien</label>
                                     </div>
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" id="email_address_2" class="form-control" name="nid" placeholder="Enter your name">
+                                                <input type="text" name="id_jenis_pasien" class="form-control" value="{{ $data->id_jenis_pasien }}" readonly disable>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                  <div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Nama Dokter</label>
+                                        <label>Jenis Pasien</label>
                                     </div>
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" id="email_address_2" class="form-control" name="nama_dokter" placeholder="Enter your name">
+                                                <input type="text" name="jenis_pasien" class="form-control"  value="{{ $data->jenis_pasien }}"  placeholder="Jenis Pasien">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Tanggal Lahir</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" name="tgl_lahir" class="form-control" placeholder="Please choose a date...">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                 <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Tempat Lahir</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" name="tempat_lahir" id="email_address_2" class="form-control" placeholder="Enter your name">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                 <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Umur</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" name="umur" id="email_address_2" class="form-control" placeholder="Enter your name">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                 <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Jenis Kelamin</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                 <div class="demo-radio-button">
-                                <input name="jenis_kelamin" type="radio" value="Laki-Laki" id="radio_1"  />
-                                <label for="radio_1">Laki-Laki</label>
-                                <input name="jenis_kelamin" type="radio" value="Perempuan" id="radio_2" />
-                                <label for="radio_2">Perempuan</label>
-                                <input name="group1" type="radio" class="with-gap" id="radio_3" />
-                            </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                 <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Alamat</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                    <textarea rows="4" name="alamat" class="form-control no-resize auto-growth" placeholder="Please type what you want... And please don't forget the ENTER key press multiple times :)"></textarea>
-                                </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                 <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>No Telp</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" name="no_telp" id="email_address_2" class="form-control" placeholder="Enter your name">
-												                        <input type="text" name="id" id="email_address_2" class="form-control" placeholder="ID Dokter" value="{{ Auth::user()->id }}">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Spesialis</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" name="spesialis" class="form-control"  placeholder="Dokter Spesialis">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div class="row clearfix">
-                                    <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4">
+                                <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4">
                                        <input type="submit" class="btn btn-primary waves-effect" value="SIMPAN">
-                                       <a href="{{ route('dokter.index') }}" type="button" class="btn btn-danger waves-effect">BATAL</button></a>
+                                       <a href="{{ route('jenis_pasien.index') }}" type="button" class="btn btn-danger waves-effect">BATAL</button></a>
                                     </div>
                                 </div>
                         </div>
-
+                        </form>
                     </div>
                 </div>
-                </form>
             </div>
             <!--DateTime Picker -->
 

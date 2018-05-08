@@ -65,8 +65,9 @@ class PasienController extends Controller
      */
     public function show($id)
     {
-      $data['data']=Pasien::where('no_pasien',$id)->paginate(6);
-      return view("pasien.list_pasien", $data);
+      $items['items']=JenisPasien::get();
+      $data['data']=Pasien::find($id);
+      return view("pasien.list_detail_pasien", $data, $items);
     }
 
     /**

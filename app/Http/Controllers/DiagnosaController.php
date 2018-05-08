@@ -71,8 +71,9 @@ class DiagnosaController extends Controller
      */
     public function edit($id)
     {
+      $dtr['dtr']=Dokter::get();
       $data['data']=Diagnosa::find($id);
-      return view('dokter.formubah_diagnosa', $data);
+      return view('dokter.diagnosa.formubah_diagnosa', $data, $dtr);
     }
 
     /**
@@ -89,8 +90,7 @@ class DiagnosaController extends Controller
         Diagnosa::find($id)->update(['nid'=> $request->nid]);
         Diagnosa::find($id)->update(['id_perawat'=> $request->id_perawat]);
         Diagnosa::find($id)->update(['gejala'=> $request->gejala]);
-        Diagnosa::find($id0)->update(['tgl_diagnosa'=> $request->tgl_diagnosa]);
-        return redirect()->route('diagnosa.index', $temp);
+        return redirect()->route('pasien.index');
     }
 
     /**
@@ -103,7 +103,6 @@ class DiagnosaController extends Controller
     {
       $temp=Diagnosa::find($id)->value('id_diagnosa');
       Diagnosa::find($id)->delete();
-
       return redirect()->route('diagnosa.show',$temp)->with('message', 'Data berhasil di hapus');
     }
 

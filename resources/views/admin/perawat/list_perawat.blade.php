@@ -49,7 +49,7 @@
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="index.html">APLIKASI KATETERISASI JANTUNG</a>
+                <a class="navbar-brand" href="{{ url('/') }}">APLIKASI KATETERISASI JANTUNG</a>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
@@ -203,56 +203,96 @@
             <!-- #User Info -->
             <!-- Menu -->
             <div class="menu">
-            <ul class="list">
+                <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
-                    <li class="">
+                    <li>
                         <a href="{{ url('/') }}">
                             <i class="material-icons">home</i>
                             <span>Dashboard</span>
                         </a>
-                    </li>             
+                    </li>
                     <li>
                         <a href="{{ route('pasien.index') }}" class="menu-toggle">
                             <i class="material-icons">assignment</i>
                             <span>Data Pasien</span>
                         </a>
+
                     </li>
-                    <li>
+                    <li class="">
                         <a href="{{ route('rekmed.index') }}" class="menu-toggle">
                             <i class="material-icons">view_list</i>
-                            <span>Rekam Medis</span>
+                            <span>Data Rekam Medis</span>
                         </a>
-                    </li>   
-                    <li class="active">
-                        @if(Auth::user()->hak_akses==2)
+                    </li>
+                    <li class="">
+                        @if(Auth::user()->hak_akses==2 || Auth::user()->hak_akses==0)
                         <a href="{{ route('dokter.index') }}" class="menu-toggle">
                             <i class="material-icons">view_list</i>
                             <span>Data Dokter</span>
                         </a>
-                        @elseif(Auth::user()->hak_akses==3)
+                        @endif                        
+                    </li>
+                    <li class="active">
+                        @if(Auth::user()->hak_akses==3 || Auth::user()->hak_akses==0)
                         <a href="{{ route('perawat.index') }}" class="menu-toggle">
                             <i class="material-icons">view_list</i>
                             <span>Data Perawat</span>
                         </a>
                         @endif
                     </li>
-                    @if(Auth::user()->hak_akses==2)
                     <li class="">
+                        @if(Auth::user()->hak_akses==0)
+                        <a href="{{ route('pegawai.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Pegawai</span>
+                        </a>
+                        @endif
+                    </li>
+                    
+                    <li class="">
+                        @if(Auth::user()->hak_akses==2 || Auth::user()->hak_akses==1 || Auth::user()->hak_akses==0)
                         <a href="{{ route('masterpengajuan.index') }}" class="menu-toggle">
                             <i class="material-icons">view_list</i>
                             <span>Data BHP</span>
                         </a>
+                        @endif
                     </li>
-                    @endif         
+                   
+                    <li class="">
+                        @if(Auth::user()->hak_akses==0)
+                        <a href="{{ route('jenis_pasien.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Jenis Pasien</span>
+                        </a>
+                        @endif
+                    </li>
+                    <li class="">
+                        @if(Auth::user()->hak_akses==0)
+                        <a href="{{ route('statuspegawai.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Status Pegawai</span>
+                        </a>
+                        @endif
+                    </li>
+                    <li class="">
+                        @if(Auth::user()->hak_akses==0)
+                        <a href="{{ route('statuspegawai.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Status Pegawai</span>
+                        </a>
+                        @endif
+                    </li>
                 </ul>
             </div>
             <!-- #Menu -->
             <!-- Footer -->
             <div class="legal">
                 <div class="copyright">
-                    &copy; 2018 <a href="javascript:void(0);">Sistem Informasi Kateterisasi Jantung</a>.
+                    &copy; 2018 <a href="javascript:void(0);">Sistem Informasi <br>Kateterisasi Jantung</a>.
                 </div>
-
+                <div class="version">
+                    <b>Developed by: </b> Anak Ayam Studio
+                </div>
             </div>
             <!-- #Footer -->
         </aside>

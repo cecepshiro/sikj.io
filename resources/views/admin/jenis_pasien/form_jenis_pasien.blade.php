@@ -46,7 +46,7 @@
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="index.html">APLIKASI KATETERISASI JANTUNG</a>
+                <a class="navbar-brand" href="{{ url('/') }}">APLIKASI KATETERISASI JANTUNG</a>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
@@ -69,21 +69,28 @@
             <!-- User Info -->
             <div class="user-info">
                 <div class="image">
-                    <img src="images/user.png" width="48" height="48" alt="User" />
+                    <img src="{{ asset('/backend/images/user.png') }}" width="48" height="48" alt="User" />
                 </div>
                 <div class="info-container">
-                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">John Doe</div>
-                    <div class="email">john.doe@example.com</div>
+                     <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}</div>
+                    <div class="email">{{ Auth::user()->email }}</div>
                     <div class="btn-group user-helper-dropdown">
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                         <ul class="dropdown-menu pull-right">
-                            <li><a href="javascript:void(0);"><i class="material-icons">person</i>Profile</a></li>
-                            <li role="seperator" class="divider"></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">group</i>Followers</a></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">shopping_cart</i>Sales</a></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">favorite</i>Likes</a></li>
-                            <li role="seperator" class="divider"></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">input</i>Sign Out</a></li>
+                            <li>
+
+                              <a href="{{ route('logout') }}"
+                                  onclick="event.preventDefault();
+                                           document.getElementById('logout-form').submit();">
+                                  <i class="material-icons">input</i>Sign Out
+                              </a>
+
+                              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                  {{ csrf_field() }}
+                              </form>
+
+
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -94,18 +101,81 @@
                 <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
                     <li>
-                        <a href="index.html">
+                        <a href="{{ url('/') }}">
                             <i class="material-icons">home</i>
-                            <span>Home</span>
+                            <span>Dashboard</span>
                         </a>
                     </li>
-
-
-                    <li class="active">
-                        <a href="javascript:void(0);" class="menu-toggle">
+                    <li>
+                        <a href="{{ route('pasien.index') }}" class="menu-toggle">
                             <i class="material-icons">assignment</i>
-                            <span>Forms</span>
+                            <span>Data Pasien</span>
                         </a>
+
+                    </li>
+                    <li class="">
+                        <a href="{{ route('rekmed.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Rekam Medis</span>
+                        </a>
+                    </li>
+                    <li class="">
+                        @if(Auth::user()->hak_akses==2 || Auth::user()->hak_akses==0)
+                        <a href="{{ route('dokter.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Dokter</span>
+                        </a>
+                        @endif                        
+                    </li>
+                    <li class="">
+                        @if(Auth::user()->hak_akses==3 || Auth::user()->hak_akses==0)
+                        <a href="{{ route('perawat.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Perawat</span>
+                        </a>
+                        @endif
+                    </li>
+                    <li class="">
+                        @if(Auth::user()->hak_akses==0)
+                        <a href="{{ route('pegawai.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Pegawai</span>
+                        </a>
+                        @endif
+                    </li>
+                    
+                    <li class="">
+                        @if(Auth::user()->hak_akses==2 || Auth::user()->hak_akses==1 || Auth::user()->hak_akses==0)
+                        <a href="{{ route('masterpengajuan.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data BHP</span>
+                        </a>
+                        @endif
+                    </li>
+                   
+                    <li class="active">
+                        @if(Auth::user()->hak_akses==0)
+                        <a href="{{ route('jenis_pasien.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Jenis Pasien</span>
+                        </a>
+                        @endif
+                    </li>
+                    <li class="">
+                        @if(Auth::user()->hak_akses==0)
+                        <a href="{{ route('statuspegawai.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Status Pegawai</span>
+                        </a>
+                        @endif
+                    </li>
+                    <li class="">
+                        @if(Auth::user()->hak_akses==0)
+                        <a href="{{ route('statuspegawai.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Status Pegawai</span>
+                        </a>
+                        @endif
                     </li>
                 </ul>
             </div>
@@ -148,6 +218,8 @@
                             </ul>
                         </div>
                         <div class="body">
+                        <form method="POST" action="{{ route('jenis_pasien.store') }}" enctype="multipart/form-data">
+                        {{ csrf_field() }}
                             <div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
                                         <label>ID Jenis Pasien</label>
@@ -155,7 +227,7 @@
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" name="nid" class="form-control" value="JP0001" disabled>
+                                                <input type="text" name="id_jenis_pasien" class="form-control" placeholder="ID Jenis Pasien">
                                             </div>
                                         </div>
                                     </div>
@@ -173,15 +245,15 @@
                                     </div>
                                 </div>
                                 <div class="row clearfix">
-                                    <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4">
-                                        <button type="button" class="btn btn-primary waves-effect">SIMPAN</button>
-                                       <button type="button" class="btn btn-danger waves-effect">BATAL</button>
+                                <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4">
+                                       <input type="submit" class="btn btn-primary waves-effect" value="SIMPAN">
+                                       <a href="{{ route('jenis_pasien.index') }}" type="button" class="btn btn-danger waves-effect">BATAL</button></a>
                                     </div>
                                 </div>
                         </div>
-
+                        </form>
                     </div>
-                </div>//
+                </div>
             </div>
             <!--DateTime Picker -->
 

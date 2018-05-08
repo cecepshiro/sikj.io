@@ -47,7 +47,7 @@
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="index.html">APLIKASI KATETERISASI JANTUNG</a>
+                <a class="navbar-brand" href="{{ url('/') }}">APLIKASI KATETERISASI JANTUNG</a>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
@@ -223,26 +223,63 @@
                         </a>
                     </li>
                     <li class="">
-                        @if(Auth::user()->hak_akses==2)
+                        @if(Auth::user()->hak_akses==2 || Auth::user()->hak_akses==0)
                         <a href="{{ route('dokter.index') }}" class="menu-toggle">
                             <i class="material-icons">view_list</i>
                             <span>Data Dokter</span>
                         </a>
-                        @elseif(Auth::user()->hak_akses==3)
+                        @endif                        
+                    </li>
+                    <li class="">
+                        @if(Auth::user()->hak_akses==3 || Auth::user()->hak_akses==0)
                         <a href="{{ route('perawat.index') }}" class="menu-toggle">
                             <i class="material-icons">view_list</i>
                             <span>Data Perawat</span>
                         </a>
                         @endif
                     </li>
-                    @if(Auth::user()->hak_akses==2 || Auth::user()->hak_akses==1)
                     <li class="">
+                        @if(Auth::user()->hak_akses==0)
+                        <a href="{{ route('pegawai.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Pegawai</span>
+                        </a>
+                        @endif
+                    </li>
+                    
+                    <li class="">
+                        @if(Auth::user()->hak_akses==2 || Auth::user()->hak_akses==1 || Auth::user()->hak_akses==0)
                         <a href="{{ route('masterpengajuan.index') }}" class="menu-toggle">
                             <i class="material-icons">view_list</i>
                             <span>Data BHP</span>
                         </a>
+                        @endif
                     </li>
-                    @endif
+                   
+                    <li class="">
+                        @if(Auth::user()->hak_akses==0)
+                        <a href="{{ route('jenis_pasien.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Jenis Pasien</span>
+                        </a>
+                        @endif
+                    </li>
+                    <li class="">
+                        @if(Auth::user()->hak_akses==0)
+                        <a href="{{ route('statuspegawai.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Status Pegawai</span>
+                        </a>
+                        @endif
+                    </li>
+                    <li class="">
+                        @if(Auth::user()->hak_akses==0)
+                        <a href="{{ route('statuspegawai.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Status Pegawai</span>
+                        </a>
+                        @endif
+                    </li>
                 </ul>
             </div>
             <!-- #Menu -->
@@ -285,7 +322,7 @@
                         </div>
                         <div class="body">
                             <div class="table-responsive">
-                            @if(Auth::user()->hak_akses==4)
+                            @if(Auth::user()->hak_akses==1)
                             <div>
                                 <a href="{{ route('pasien.create') }}" class="btn bg-green btn-md waves-effect">
                                 <i class="material-icons"></i>Tambah Pasien</a>
@@ -335,11 +372,9 @@
                               				<input type="hidden" name="_token" value="{{ csrf_token() }}">
                                             <button type="submit" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
                                             @endif
-                                            <button type="button" class="btn btn-xs bg-light-blue waves-effect"><i class="material-icons">pageview</i></button>
-                                            <!--<a href="{{ route('diagnosa.show', ['diagnosa'=>$d->no_pasien]) }}" class="btn btn-xs bg-green waves-effect">
-                                              <i class="material-icons">add</i>
-                              							</a>
-                                          -->
+                                            <a href="{{ route('pasien.show', ['pasien'=>$d->no_pasien]) }}" class="btn btn-xs bg-light-blue waves-effect">
+                                            <i class="material-icons">pageview</i>
+                              				</a>
                                             </form>
                                            
                                           <!--Request ID Pasien

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>Form Dokter</title>
+    <title>Form Ubah Data Diagnosa</title>
       @extends('layouts.stylecss')
 </head>
 
@@ -68,12 +68,12 @@
         <aside id="leftsidebar" class="sidebar">
             <!-- User Info -->
             <div class="user-info">
-                <div class="image">
-                     <img src="{{ asset('/backend/images/user.png') }}" width="48" height="48" alt="User" />
-                </div>
-                <div class="info-container">
-                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}</div>
-                    <div class="email">{{ Auth::user()->email }}</div>
+              <div class="image">
+                   <img src="{{ asset('/backend/images/user.png') }}" width="48" height="48" alt="User" />
+              </div>
+              <div class="info-container">
+                  <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}</div>
+                  <div class="email">{{ Auth::user()->email }}</div>
                     <div class="btn-group user-helper-dropdown">
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                         <ul class="dropdown-menu pull-right">
@@ -106,7 +106,7 @@
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    <li>
+                    <li class="active">
                         <a href="{{ route('pasien.index') }}" class="menu-toggle">
                             <i class="material-icons">assignment</i>
                             <span>Data Pasien</span>
@@ -119,7 +119,7 @@
                             <span>Data Rekam Medis</span>
                         </a>
                     </li>
-                    <li class="active">
+                    <li class="">
                         @if(Auth::user()->hak_akses==2 || Auth::user()->hak_akses==0)
                         <a href="{{ route('dokter.index') }}" class="menu-toggle">
                             <i class="material-icons">view_list</i>
@@ -183,7 +183,7 @@
             <!-- Footer -->
             <div class="legal">
                 <div class="copyright">
-                    &copy; 2018 <a href="javascript:void(0);">Sistem Informasi Kateterisasi Jantung</a>.
+                    &copy; 2018 <a href="javascript:void(0);">Sistem Informasi<br> Kateterisasi Jantung</a>.
                 </div>
                 <div class="version">
                     <b>Developed by: </b> Anak Ayam Studio
@@ -207,7 +207,7 @@
                         <div class="header">
 
                             <h2>
-                                FORM DOKTER
+                                FORM UBAH DATA DIAGNOSA
                             </h2>
                             <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
@@ -218,145 +218,97 @@
                             </ul>
                         </div>
                         <div class="body">
-						 <form method="POST" action="{{ route('dokter.store') }}" enctype="multipart/form-data">
+                        <form method="POST" action="{{ route('diagnosa.update', ['diagnosa'=> $data['id_diagnosa']]) }}" enctype="multipart/form-data">
+                        <input type="hidden" name="_method" value="PATCH">
                         {{ csrf_field() }}
+                          <?php
+                          //$kode = Auth::user()->id;
+                          //$nid = DB::table('data_dokter')->select('nid')->value('nid');
+                          //$namadokter = DB::table('data_dokter')->select('nama_dokter')->where('nid', $nid)->value('nama_dokter');
+                          $nid = DB::table('data_dokter')->select('nama_dokter')->where('nid', $data->nid)->value('nama_dokter');
+                          $nama=DB::table('data_pasien')->select('nama_pasien')->where('no_pasien', $data->no_pasien)->value('nama_pasien');
+                          ?>
                             <div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Nomor Induk Dokter</label>
+                                        <label>ID Diagnosa</label>
                                     </div>
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" id="email_address_2" class="form-control" name="nid" placeholder="Enter your name">
+                                                <input type="text" name="id_diagnosa" class="form-control" value="{{ $data->id_diagnosa }}" readonly required>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                  <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label>No Pasien</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" name="no_pasien" class="form-control" value="{{ $data->no_pasien }}" required readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label>Nama Pasien</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" name="nama_pasien" class="form-control" required value="{{ $nama }}" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
                                         <label>Nama Dokter</label>
                                     </div>
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" id="email_address_2" class="form-control" name="nama_dokter" placeholder="Enter your name">
-                                            </div>
+                                            <select name="nid" class="form-control show-tick" required>
+                                                <option value="{{ $data->nid }}">{{ $nid }}</option>
+                                                @foreach($dtr as $d)
+                                                    <option value="{{ $d->nid }}">{{ $d->nama_dokter }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Tanggal Lahir</label>
+                                        <label>Gejala</label>
                                     </div>
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" name="tgl_lahir" class="form-control" placeholder="Please choose a date...">
+                                                <input type="text" name="gejala" class="form-control" placeholder="Masukkan gejala" value="{{ $data->gejala }}" required>
+                                                <input type="hidden" name="id_perawat" value="{{ $data->id_perawat }}" class="form-control"  readonly>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                 <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Tempat Lahir</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" name="tempat_lahir" id="email_address_2" class="form-control" placeholder="Enter your name">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                 <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Umur</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" name="umur" id="email_address_2" class="form-control" placeholder="Enter your name">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                 <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Jenis Kelamin</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                 <div class="demo-radio-button">
-                                <input name="jenis_kelamin" type="radio" value="Laki-Laki" id="radio_1"  />
-                                <label for="radio_1">Laki-Laki</label>
-                                <input name="jenis_kelamin" type="radio" value="Perempuan" id="radio_2" />
-                                <label for="radio_2">Perempuan</label>
-                                <input name="group1" type="radio" class="with-gap" id="radio_3" />
-                            </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                 <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Alamat</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                    <textarea rows="4" name="alamat" class="form-control no-resize auto-growth" placeholder="Please type what you want... And please don't forget the ENTER key press multiple times :)"></textarea>
-                                </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                 <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>No Telp</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" name="no_telp" id="email_address_2" class="form-control" placeholder="Enter your name">
-												                        <input type="text" name="id" id="email_address_2" class="form-control" placeholder="ID Dokter" value="{{ Auth::user()->id }}">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label>Spesialis</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" name="spesialis" class="form-control"  placeholder="Dokter Spesialis">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
                                 <div class="row clearfix">
                                     <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4">
-                                       <input type="submit" class="btn btn-primary waves-effect" value="SIMPAN">
-                                       <a href="{{ route('dokter.index') }}" type="button" class="btn btn-danger waves-effect">BATAL</button></a>
-                                    </div>
+                                      <input type="submit" class="btn btn-primary waves-effect" value="SIMPAN">
+                                      <a href="{{ route('pasien.index') }}" type="button" class="btn btn-danger waves-effect">BATAL</button></a>
+                                   </div>
                                 </div>
+                        </form>
                         </div>
 
                     </div>
-                </div>
-                </form>
+                </div>//
             </div>
             <!--DateTime Picker -->
 
             <!--#END# DateTime Picker -->
         </div>
     </section>
-
-      @extends('layouts.stylejs')
+    @extends('layouts.stylejs')
 </body>
 </html>

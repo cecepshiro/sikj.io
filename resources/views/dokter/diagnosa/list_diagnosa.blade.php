@@ -46,7 +46,7 @@
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="index.html">APLIKASI KATETERISASI JANTUNG</a>
+                <a class="navbar-brand" href="{{ url('/') }}">APLIKASI KATETERISASI JANTUNG</a>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
@@ -204,7 +204,7 @@
             <!-- #User Info -->
             <!-- Menu -->
             <div class="menu">
-            <ul class="list">
+                <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
                     <li>
                         <a href="{{ url('/') }}">
@@ -226,15 +226,60 @@
                         </a>
                     </li>
                     <li class="">
-                        @if(Auth::user()->hak_akses==2)
+                        @if(Auth::user()->hak_akses==2 || Auth::user()->hak_akses==0)
                         <a href="{{ route('dokter.index') }}" class="menu-toggle">
                             <i class="material-icons">view_list</i>
                             <span>Data Dokter</span>
                         </a>
-                        @elseif(Auth::user()->hak_akses==3)
+                        @endif                        
+                    </li>
+                    <li class="">
+                        @if(Auth::user()->hak_akses==3 || Auth::user()->hak_akses==0)
                         <a href="{{ route('perawat.index') }}" class="menu-toggle">
                             <i class="material-icons">view_list</i>
                             <span>Data Perawat</span>
+                        </a>
+                        @endif
+                    </li>
+                    <li class="">
+                        @if(Auth::user()->hak_akses==0)
+                        <a href="{{ route('pegawai.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Pegawai</span>
+                        </a>
+                        @endif
+                    </li>
+                    
+                    <li class="">
+                        @if(Auth::user()->hak_akses==2 || Auth::user()->hak_akses==1 || Auth::user()->hak_akses==0)
+                        <a href="{{ route('masterpengajuan.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data BHP</span>
+                        </a>
+                        @endif
+                    </li>
+                   
+                    <li class="">
+                        @if(Auth::user()->hak_akses==0)
+                        <a href="{{ route('jenis_pasien.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Jenis Pasien</span>
+                        </a>
+                        @endif
+                    </li>
+                    <li class="">
+                        @if(Auth::user()->hak_akses==0)
+                        <a href="{{ route('statuspegawai.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Status Pegawai</span>
+                        </a>
+                        @endif
+                    </li>
+                    <li class="">
+                        @if(Auth::user()->hak_akses==0)
+                        <a href="{{ route('statuspegawai.index') }}" class="menu-toggle">
+                            <i class="material-icons">view_list</i>
+                            <span>Data Status Pegawai</span>
                         </a>
                         @endif
                     </li>
@@ -321,7 +366,6 @@
                                             <td>{{ $d->gejala }}</td>
                                             <td>{{ $d->created_at }}</td>
                                             <div class="form-group">
-                                           
                                             <form action="{{ route('diagnosa.destroy', ['diagnosa'=>$d->id_diagnosa]) }}" method="post">
                                             <td>
                                             @if(Auth::user()->hak_akses==2)
@@ -331,10 +375,14 @@
                                             @endif
                                             @if(Auth::user()->hak_akses==0)
                               				<input type="hidden" name="_method" value="DELETE">
+                                            <input type="hidden" name="_method" value="{{$d->id_diagnosa}}">
                               				<input type="hidden" name="_token" value="{{ csrf_token() }}">
                                             <button type="submit" class="btn btn-xs bg-red waves-effect"><i class="material-icons">delete_forever</i></button>
                                             @endif
                                             </form>
+
+
+                                            
                                             @if( Auth::user()->hak_akses==3)
                                             <form action="{{ action('DetailDiagnosaController@showformdetail', ['showformdetail'=>$d->id_diagnosa]) }}" method="get">
                                             <input type="hidden" name="cari" value={{ $d->id_diagnosa }}>
