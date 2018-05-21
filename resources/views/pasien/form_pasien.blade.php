@@ -220,7 +220,18 @@
                         <div class="body">
 						 <form method="POST" action="{{ route('pasien.store') }}" enctype="multipart/form-data">
                         {{ csrf_field() }}
-                          
+                                 <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label>Nama Pasien</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="email_address_2" class="form-control" name="no_pasien" placeholder="Masukkan No Pasien">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                  <div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
                                         <label>Nama Pasien</label>
