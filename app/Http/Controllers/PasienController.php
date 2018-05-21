@@ -42,7 +42,7 @@ class PasienController extends Controller
     public function store(Request $request)
     {
       Pasien::create([
-            //'no_pasien' => $request->no_pasien,
+            'no_pasien' => $request->no_pasien,
             'nama_pasien' => $request->nama_pasien,
             'id_jenis_pasien'=>$request->id_jenis_pasien,
             'tgl_lahir' => $request->tgl_lahir,
