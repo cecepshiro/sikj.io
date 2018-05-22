@@ -321,6 +321,13 @@
                         </div>
                         <div class="body">
                             <div class="table-responsive">
+                            @if(Auth::user()->hak_akses==0)
+                            <div>
+                                <a href="{{ route('dokter.create') }}" class="btn bg-green btn-md waves-effect">
+                                <i class="material-icons"></i>Tambah Dokter</a>
+                            </div>
+                            <br>
+                            @endif
                                 <table class="table table-bordered table-striped table-hover dataTable js-basic-example">
                                     <thead>
                                         <tr>
